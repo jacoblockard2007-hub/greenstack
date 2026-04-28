@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GREEN STACK // Reading, PA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:    #0a0a0a;
+    --grey-900: #111111;
+    --grey-800: #1a1a1a;
+    --grey-700: #242424;
+    --grey-600: #333333;
+    --grey-400: #666666;
+    --grey-200: #aaaaaa;
+    --grey-100: #cccccc;
+    --red:      #cc0000;
+    --red-dim:  #8a0000;
+    --red-glow: rgba(204,0,0,0.15);
+    --green:    #00cc66;
+    --white:    #e8e8e8;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Scanline overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  a { color: var(--red); text-decoration: none; }
+  a:hover { color: var(--white); }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--grey-900);
+    border-bottom: 2px solid var(--red);
+    padding: 0 2rem;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo-block {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-right: 1px solid var(--grey-700);
+    padding-right: 1.5rem;
+    margin-right: 1.5rem;
+  }
+
+  .logo-mark {
+    width: 36px;
+    height: 36px;
+    background: var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--white);
+    clip-path: polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%);
+  }
+
+  .logo-text {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.12em;
+    color: var(--white);
+    line-height: 1.2;
+  }
+
+  .logo-sub {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--grey-400);
+    letter-spacing: 0.2em;
+  }
+
+  nav {
+    display: flex;
+    align-items: stretch;
+  }
+
+  nav a {
+    display: flex;
+    align-items: center;
+    padding: 0 1.2rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--grey-200);
+    border-right: 1px solid var(--grey-700);
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+
+  nav a:hover, nav a.active {
+    color: var(--white);
+    background: var(--grey-700);
+  }
+
+  nav a.cta {
+    color: var(--red);
+    font-weight: 600;
+  }
+  nav a.cta:hover {
+    background: var(--red);
+    color: var(--white);
+  }
+
+  /* ── STATUS BAR ── */
+  .status-bar {
+    background: var(--grey-800);
+    border-bottom: 1px solid var(--grey-700);
+    padding: 0.5rem 2rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--grey-400);
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .stat-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--grey-600);
+  }
+  .stat-dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .stat-dot.red   { background: var(--red); }
+
+  .stat-val { color: var(--white); font-weight: 600; }
+  .sys-info { margin-left: auto; color: var(--grey-600); }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
+
+  main { padding: 2rem 0; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--red);
+    text-transform: uppercase;
+    background: var(--red-glow);
+    border: 1px solid var(--red-dim);
+    padding: 0.2rem 0.6rem;
+  }
+
+  .section-title {
+    font-family: var(--mono);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    text-transform: uppercase;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--grey-700), transparent);
+  }
+
+  /* ── SEARCH BAR ── */
+  .search-panel {
+    background: var(--grey-800);
+    border: 1px solid var(--grey-700);
+    border-left: 3px solid var(--red);
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .search-panel form {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .field-group label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--grey-400);
+    text-transform: uppercase;
+  }
+
+  input[type="text"], select {
+    background: var(--grey-900);
+    border: 1px solid var(--grey-600);
+    color: var(--white);
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  input[type="text"]:focus, select:focus {
+    border-color: var(--red);
+  }
+
+  select option { background: var(--grey-900); }
+
+  .btn {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.55rem 1.2rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-primary {
+    background: var(--red);
+    color: var(--white);
+  }
+  .btn-primary:hover { background: #e00000; }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--grey-200);
+    border: 1px solid var(--grey-600);
+  }
+  .btn-ghost:hover { border-color: var(--white); color: var(--white); }
+
+  .btn-claim {
+    background: var(--grey-700);
+    color: var(--green);
+    border: 1px solid #004433;
+    font-size: 0.7rem;
+    padding: 0.35rem 0.9rem;
+  }
+  .btn-claim:hover { background: #004433; border-color: var(--green); }
+
+  .error-box {
+    background: rgba(204,0,0,0.1);
+    border: 1px solid var(--red);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: #ff6666;
+  }
+
+  /* ── GRID ── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  @media (max-width: 900px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    header { flex-wrap: wrap; }
+  }
+
+  /* ── LISTING CARDS ── */
+  .listings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1px;
+    background: var(--grey-700);
+    border: 1px solid var(--grey-700);
+  }
+
+  .listing-card {
+    background: var(--grey-900);
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    transition: background 0.15s;
+    position: relative;
+  }
+
+  .listing-card:hover { background: var(--grey-800); }
+
+  .listing-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--grey-700);
+  }
+
+  .listing-card.available::before { background: var(--green); }
+  .listing-card.pending::before   { background: var(--red); }
+
+  .card-title {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--white);
+    line-height: 1.3;
+  }
+
+  .card-desc {
+    font-size: 0.8rem;
+    color: var(--grey-200);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .card-meta {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 0.4rem;
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    padding: 0.15rem 0.5rem;
+    border: 1px solid;
+    text-transform: uppercase;
+  }
+
+  .tag-zip     { color: var(--grey-400); border-color: var(--grey-600); }
+  .tag-cond    { color: #cc8800; border-color: #553300; }
+  .tag-avail   { color: var(--green); border-color: #004433; }
+  .tag-pending { color: var(--red); border-color: var(--red-dim); }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--grey-700);
+    padding-top: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .card-id {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--grey-600);
+  }
+
+  /* ── GUIDES ── */
+  .guides-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--grey-700);
+    border: 1px solid var(--grey-700);
+  }
+
+  .guide-row {
+    background: var(--grey-900);
+    padding: 1rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: background 0.15s;
+    position: relative;
+    border-left: 3px solid var(--red-dim);
+  }
+
+  .guide-row:hover { background: var(--grey-800); border-left-color: var(--red); }
+
+  .guide-icon {
+    font-size: 1.4rem;
+    width: 36px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .guide-info { flex: 1; }
+
+  .guide-title {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--white);
+    margin-bottom: 0.2rem;
+  }
+
+  .guide-meta {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .diff-tag {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    padding: 0.1rem 0.4rem;
+    border: 1px solid var(--grey-600);
+    color: var(--grey-400);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .diff-tag.Beginner     { color: var(--green); border-color: #004433; }
+  .diff-tag.Intermediate { color: #cc8800; border-color: #553300; }
+  .diff-tag.Advanced     { color: var(--red); border-color: var(--red-dim); }
+
+  .guide-cat {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--grey-400);
+  }
+
+  .guide-arrow {
+    font-family: var(--mono);
+    color: var(--grey-600);
+    font-size: 1rem;
+    transition: transform 0.15s;
+  }
+
+  .guide-row:hover .guide-arrow { color: var(--red); transform: translateX(3px); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    background: var(--grey-900);
+    border: 1px solid var(--grey-700);
+    border-left: 3px solid var(--grey-600);
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .empty-state p {
+    font-family: var(--mono);
+    color: var(--grey-400);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+
+  .empty-state strong { color: var(--grey-200); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--grey-900);
+    border-top: 1px solid var(--grey-700);
+    padding: 1rem 2rem;
+    margin-top: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--grey-600);
+  }
+
+  footer span { color: var(--grey-400); }
+
+  .zip-invalid {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--red);
+    margin-bottom: 1rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--red-dim);
+    background: var(--red-glow);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-block">
+    <div class="logo-mark">GS</div>
+    <div>
+      <div class="logo-text">GREEN STACK</div>
+      <div class="logo-sub">Reading, PA // E-Waste Revival Network</div>
+    </div>
+  </div>
+  <nav>
+    <a href="/" class="active">// Listings</a>
+    <a href="#guides">// Guides</a>
+    <a href="/list" class="cta">+ List Hardware</a>
+    <a href="/guide/new">+ New Guide</a>
+  </nav>
+</header>
+
+<div class="status-bar">
+  <div class="stat-item">
+    <div class="stat-dot green"></div>
+    <span>AVAILABLE: <span class="stat-val">{{ stats.available }}</span></span>
+  </div>
+  <div class="stat-item">
+    <div class="stat-dot red"></div>
+    <span>PENDING: <span class="stat-val">{{ stats.pending }}</span></span>
+  </div>
+  <div class="stat-item">
+    <div class="stat-dot"></div>
+    <span>REVIVAL GUIDES: <span class="stat-val">{{ stats.guides }}</span></span>
+  </div>
+  <div class="sys-info">NODE: 127.0.0.1 // DB: greenstack.db // MEM: &lt;128MB</div>
+</div>
+
+<div class="container">
+<main>
+
+  <!-- SEARCH -->
+  <div class="search-panel">
+    <form method="GET" action="/">
+      <div class="field-group">
+        <label>Search Hardware</label>
+        <input type="text" name="q" placeholder="thinkpad, raspberry pi..." value="{{ search }}">
+      </div>
+      <div class="field-group">
+        <label>ZIP Code (Reading, PA)</label>
+        <select name="zip">
+          <option value="">All Areas</option>
+          {% for z in reading_zips %}
+          <option value="{{ z }}" {% if zip_filter == z %}selected{% endif %}>{{ z }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">&#x25B6; SEARCH</button>
+      {% if zip_filter or search %}
+      <a href="/" class="btn btn-ghost">&#x2715; CLEAR</a>
+      {% endif %}
+    </form>
+  </div>
+
+  {% if zip_filter == '__invalid__' %}
+  <div class="zip-invalid">&#x26A0; ZIP code not in Reading, PA service area. Showing all listings.</div>
+  {% endif %}
+
+  <div class="grid-2">
+
+    <!-- LISTINGS -->
+    <div>
+      <div class="section-header">
+        <div class="section-label">01</div>
+        <div class="section-title">Hardware Listings</div>
+        <div class="section-line"></div>
+        <a href="/list" class="btn btn-primary" style="font-size:0.7rem;padding:0.35rem 0.9rem;">+ LIST</a>
+      </div>
+
+      {% if listings %}
+      <div class="listings-grid">
+        {% for item in listings %}
+        <div class="listing-card {{ item.status }}">
+          <div class="card-title">{{ item.title }}</div>
+          <div class="card-desc">{{ item.description or 'No description provided.' }}</div>
+          <div class="card-meta">
+            <span class="tag tag-zip">&#x1F4CD; {{ item.zip_code }}</span>
+            {% if item.condition %}
+            <span class="tag tag-cond">{{ item.condition }}</span>
+            {% endif %}
+            {% if item.status == 'available' %}
+            <span class="tag tag-avail">&#x25CF; Available</span>
+            {% else %}
+            <span class="tag tag-pending">&#x25CF; Pending</span>
+            {% endif %}
+          </div>
+          <div class="card-footer">
+            <span class="card-id">ID #{{ '%04d' % item.id }}</span>
+            {% if item.status == 'available' %}
+            <form method="POST" action="/claim/{{ item.id }}">
+              <button type="submit" class="btn btn-claim">&#x27A4; CLAIM</button>
+            </form>
+            {% else %}
+            <span style="font-family:var(--mono);font-size:0.65rem;color:var(--grey-600);">CLAIMED</span>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <p>// <strong>NO LISTINGS FOUND</strong> matching current filters.<br>
+        Try a different ZIP or search term, or <a href="/list">list new hardware</a>.</p>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- GUIDES -->
+    <div id="guides">
+      <div class="section-header">
+        <div class="section-label">02</div>
+        <div class="section-title">Revival Guides</div>
+        <div class="section-line"></div>
+        <a href="/guide/new" class="btn btn-primary" style="font-size:0.7rem;padding:0.35rem 0.9rem;">+ GUIDE</a>
+      </div>
+
+      {% if guides %}
+      <div class="guides-list">
+        {% for g in guides %}
+        <a href="/guide/{{ g.id }}" style="display:block;text-decoration:none;">
+          <div class="guide-row">
+            <div class="guide-icon">
+              {% if 'CPU' in g.category %}&#x1F9E0;
+              {% elif 'Diag' in g.category %}&#x1F50D;
+              {% elif 'GPU' in g.category %}&#x1F5A5;
+              {% else %}&#x1F527;{% endif %}
+            </div>
+            <div class="guide-info">
+              <div class="guide-title">{{ g.title }}</div>
+              <div class="guide-meta">
+                <span class="diff-tag {{ g.difficulty }}">{{ g.difficulty or 'General' }}</span>
+                <span class="guide-cat">{{ g.category }}</span>
+              </div>
+            </div>
+            <div class="guide-arrow">&#x2192;</div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <p>// <strong>NO GUIDES YET.</strong><br>
+        Be the first to <a href="/guide/new">post a revival guide</a>.</p>
+      </div>
+      {% endif %}
+    </div>
+
+  </div><!-- /grid -->
+
+</main>
+</div>
+
+<footer>
+  <span>GREEN STACK v0.2 // Reading, PA E-Waste Revival Network</span>
+  <span>Flask + SQLite // Docker // &lt;128MB RAM</span>
+</footer>
+
+</body>
+</html>

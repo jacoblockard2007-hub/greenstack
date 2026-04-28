@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Revival Guide // GREEN STACK</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{--black:#0a0a0a;--grey-900:#111111;--grey-800:#1a1a1a;--grey-700:#242424;--grey-600:#333333;--grey-400:#666666;--grey-200:#aaaaaa;--red:#cc0000;--red-dim:#8a0000;--red-glow:rgba(204,0,0,0.15);--green:#00cc66;--white:#e8e8e8;--mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--black);color:var(--white);font-family:var(--sans);font-size:14px;line-height:1.6;}
+  body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);pointer-events:none;z-index:999;}
+  a{color:var(--red);text-decoration:none;}a:hover{color:var(--white);}
+  header{background:var(--grey-900);border-bottom:2px solid var(--red);padding:0 2rem;display:flex;align-items:stretch;justify-content:space-between;position:sticky;top:0;z-index:100;}
+  .logo-block{display:flex;align-items:center;gap:1rem;padding:1rem 0;border-right:1px solid var(--grey-700);padding-right:1.5rem;margin-right:1.5rem;}
+  .logo-mark{width:36px;height:36px;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:18px;color:var(--white);clip-path:polygon(10% 0%,90% 0%,100% 10%,100% 90%,90% 100%,10% 100%,0% 90%,0% 10%);}
+  .logo-text{font-family:var(--mono);font-weight:700;font-size:1.1rem;letter-spacing:0.12em;color:var(--white);line-height:1.2;}
+  .logo-sub{font-family:var(--mono);font-size:0.65rem;color:var(--grey-400);letter-spacing:0.2em;}
+  nav{display:flex;align-items:stretch;}
+  nav a{display:flex;align-items:center;padding:0 1.2rem;font-family:var(--mono);font-size:0.75rem;letter-spacing:0.1em;color:var(--grey-200);border-right:1px solid var(--grey-700);transition:all 0.15s;text-transform:uppercase;}
+  nav a:hover{color:var(--white);background:var(--grey-700);}
+  .container{max-width:780px;margin:0 auto;padding:0 2rem;}
+  main{padding:2.5rem 0;}
+  .breadcrumb{font-family:var(--mono);font-size:0.7rem;color:var(--grey-400);margin-bottom:2rem;}
+  .breadcrumb a{color:var(--grey-400);}
+  .breadcrumb a:hover{color:var(--red);}
+  .breadcrumb span{color:var(--grey-600);margin:0 0.5rem;}
+  .form-header{border-left:4px solid var(--red);padding-left:1.5rem;margin-bottom:2rem;}
+  .form-eyebrow{font-family:var(--mono);font-size:0.65rem;color:var(--red);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.4rem;}
+  .form-title{font-family:var(--mono);font-weight:700;font-size:1.4rem;color:var(--white);}
+  .form-body{background:var(--grey-900);border:1px solid var(--grey-700);border-top:3px solid var(--red);padding:2rem;}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .field-group{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1.4rem;}
+  .field-group label{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.15em;color:var(--grey-400);text-transform:uppercase;}
+  .field-group .hint{font-family:var(--mono);font-size:0.65rem;color:var(--grey-600);}
+  input[type="text"],select,textarea{background:var(--grey-800);border:1px solid var(--grey-600);color:var(--white);font-family:var(--mono);font-size:0.85rem;padding:0.6rem 0.75rem;outline:none;transition:border-color 0.15s;width:100%;}
+  input[type="text"]:focus,select:focus,textarea:focus{border-color:var(--red);}
+  textarea.content-area{resize:vertical;min-height:300px;font-family:var(--mono);font-size:0.82rem;line-height:1.7;}
+  select option{background:var(--grey-900);}
+  .btn-primary{background:var(--red);color:var(--white);font-family:var(--mono);font-size:0.8rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:0.7rem 1.8rem;border:none;cursor:pointer;transition:background 0.15s;}
+  .btn-primary:hover{background:#e00000;}
+  .md-hint{background:var(--grey-800);border:1px solid var(--grey-700);border-left:3px solid var(--grey-600);padding:0.75rem 1rem;margin-bottom:1.4rem;font-family:var(--mono);font-size:0.72rem;color:var(--grey-400);line-height:1.7;}
+  .md-hint strong{color:var(--grey-200);}
+  .back-btn{display:inline-flex;align-items:center;gap:0.5rem;font-family:var(--mono);font-size:0.75rem;color:var(--grey-400);border:1px solid var(--grey-700);padding:0.4rem 0.9rem;transition:all 0.15s;margin-top:1rem;text-transform:uppercase;letter-spacing:0.1em;}
+  .back-btn:hover{color:var(--white);border-color:var(--grey-400);}
+  footer{background:var(--grey-900);border-top:1px solid var(--grey-700);padding:1rem 2rem;margin-top:3rem;display:flex;justify-content:space-between;font-family:var(--mono);font-size:0.65rem;color:var(--grey-600);}
+  footer span{color:var(--grey-400);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-block">
+    <div class="logo-mark">GS</div>
+    <div>
+      <div class="logo-text">GREEN STACK</div>
+      <div class="logo-sub">Reading, PA // E-Waste Revival Network</div>
+    </div>
+  </div>
+  <nav>
+    <a href="/">// Listings</a>
+    <a href="/#guides">// Guides</a>
+  </nav>
+</header>
+
+<div class="container">
+<main>
+
+  <div class="breadcrumb">
+    <a href="/">HOME</a><span>//</span>
+    <a href="/#guides">REVIVAL GUIDES</a><span>//</span>
+    NEW GUIDE
+  </div>
+
+  <div class="form-header">
+    <div class="form-eyebrow">Share Your Knowledge</div>
+    <h1 class="form-title">Post a Revival Guide</h1>
+  </div>
+
+  <div class="form-body">
+    <form method="POST" action="/guide/new">
+      <div class="field-row">
+        <div class="field-group">
+          <label>Guide Title *</label>
+          <input type="text" name="title" placeholder="e.g. ThinkPad CPU Swap Guide" required>
+        </div>
+        <div class="field-group">
+          <label>Category</label>
+          <select name="category">
+            <option value="CPU Upgrade">CPU Upgrade</option>
+            <option value="Diagnostics">Diagnostics</option>
+            <option value="RAM Upgrade">RAM Upgrade</option>
+            <option value="Storage">Storage</option>
+            <option value="GPU Repair">GPU Repair</option>
+            <option value="Motherboard">Motherboard</option>
+            <option value="Display">Display</option>
+            <option value="General">General</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-group" style="max-width:240px;">
+        <label>Difficulty</label>
+        <select name="difficulty">
+          <option value="Beginner">Beginner</option>
+          <option value="Intermediate" selected>Intermediate</option>
+          <option value="Advanced">Advanced</option>
+        </select>
+      </div>
+
+      <div class="md-hint">
+        <strong>// MARKDOWN SUPPORTED:</strong><br>
+        <code>## Heading</code> &nbsp;|&nbsp; <code>### Subheading</code> &nbsp;|&nbsp;
+        <code>- list item</code> &nbsp;|&nbsp; <code>1. numbered</code> &nbsp;|&nbsp;
+        <code>**bold**</code> &nbsp;|&nbsp; <code>`inline code`</code>
+      </div>
+
+      <div class="field-group">
+        <label>Guide Content *</label>
+        <textarea class="content-area" name="content" placeholder="## Overview&#10;Write your guide here using markdown-style formatting...&#10;&#10;## Tools Required&#10;- Tool 1&#10;- Tool 2&#10;&#10;## Steps&#10;1. First step&#10;2. Second step" required></textarea>
+      </div>
+
+      <button type="submit" class="btn-primary">&#x27A4; PUBLISH GUIDE</button>
+    </form>
+  </div>
+
+  <a href="/#guides" class="back-btn">&#x2190; Back to Guides</a>
+
+</main>
+</div>
+
+<footer>
+  <span>GREEN STACK v0.2 // Reading, PA E-Waste Revival Network</span>
+  <span>Flask + SQLite // Docker // &lt;128MB RAM</span>
+</footer>
+</body>
+</html>

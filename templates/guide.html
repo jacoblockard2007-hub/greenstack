@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ guide.title }} // GREEN STACK</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:#0a0a0a;--grey-900:#111111;--grey-800:#1a1a1a;--grey-700:#242424;
+    --grey-600:#333333;--grey-400:#666666;--grey-200:#aaaaaa;--grey-100:#cccccc;
+    --red:#cc0000;--red-dim:#8a0000;--red-glow:rgba(204,0,0,0.15);
+    --green:#00cc66;--white:#e8e8e8;
+    --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--black);color:var(--white);font-family:var(--sans);font-size:14px;line-height:1.6;}
+  body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.08) 2px,rgba(0,0,0,0.08) 4px);pointer-events:none;z-index:999;}
+  a{color:var(--red);text-decoration:none;}
+  a:hover{color:var(--white);}
+
+  header{background:var(--grey-900);border-bottom:2px solid var(--red);padding:0 2rem;display:flex;align-items:stretch;justify-content:space-between;position:sticky;top:0;z-index:100;}
+  .logo-block{display:flex;align-items:center;gap:1rem;padding:1rem 0;border-right:1px solid var(--grey-700);padding-right:1.5rem;margin-right:1.5rem;}
+  .logo-mark{width:36px;height:36px;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700;font-size:18px;color:var(--white);clip-path:polygon(10% 0%,90% 0%,100% 10%,100% 90%,90% 100%,10% 100%,0% 90%,0% 10%);}
+  .logo-text{font-family:var(--mono);font-weight:700;font-size:1.1rem;letter-spacing:0.12em;color:var(--white);line-height:1.2;}
+  .logo-sub{font-family:var(--mono);font-size:0.65rem;color:var(--grey-400);letter-spacing:0.2em;}
+  nav{display:flex;align-items:stretch;}
+  nav a{display:flex;align-items:center;padding:0 1.2rem;font-family:var(--mono);font-size:0.75rem;letter-spacing:0.1em;color:var(--grey-200);border-right:1px solid var(--grey-700);transition:all 0.15s;text-transform:uppercase;}
+  nav a:hover{color:var(--white);background:var(--grey-700);}
+
+  .container{max-width:900px;margin:0 auto;padding:0 2rem;}
+  main{padding:2.5rem 0;}
+
+  .breadcrumb{font-family:var(--mono);font-size:0.7rem;color:var(--grey-400);margin-bottom:2rem;letter-spacing:0.05em;}
+  .breadcrumb a{color:var(--grey-400);}
+  .breadcrumb a:hover{color:var(--red);}
+  .breadcrumb span{color:var(--grey-600);margin:0 0.5rem;}
+
+  .guide-header{border-left:4px solid var(--red);padding-left:1.5rem;margin-bottom:2.5rem;}
+  .guide-eyebrow{font-family:var(--mono);font-size:0.65rem;color:var(--red);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.5rem;}
+  .guide-title{font-family:var(--mono);font-weight:700;font-size:1.6rem;color:var(--white);line-height:1.2;margin-bottom:1rem;}
+  .guide-tags{display:flex;gap:0.5rem;flex-wrap:wrap;}
+  .tag{font-family:var(--mono);font-size:0.65rem;letter-spacing:0.08em;padding:0.2rem 0.6rem;border:1px solid;text-transform:uppercase;}
+  .tag-cat{color:var(--grey-200);border-color:var(--grey-600);}
+  .diff-tag{padding:0.2rem 0.6rem;border:1px solid;}
+  .diff-tag.Beginner{color:var(--green);border-color:#004433;}
+  .diff-tag.Intermediate{color:#cc8800;border-color:#553300;}
+  .diff-tag.Advanced{color:var(--red);border-color:var(--red-dim);}
+  .tag-date{color:var(--grey-400);border-color:var(--grey-700);}
+
+  .guide-body{background:var(--grey-900);border:1px solid var(--grey-700);padding:2rem;font-size:0.9rem;line-height:1.8;color:var(--grey-100);}
+
+  /* Markdown-like rendering for the plain text content */
+  .guide-body pre{white-space:pre-wrap;font-family:var(--mono);font-size:0.85rem;color:var(--white);line-height:1.8;}
+  .guide-body .md-h2{font-family:var(--mono);font-weight:700;font-size:1rem;color:var(--white);margin:1.5rem 0 0.75rem;padding-bottom:0.4rem;border-bottom:1px solid var(--grey-700);letter-spacing:0.05em;}
+  .guide-body .md-h3{font-family:var(--mono);font-weight:600;font-size:0.9rem;color:var(--grey-100);margin:1.2rem 0 0.5rem;letter-spacing:0.04em;}
+  .guide-body .md-p{margin-bottom:0.75rem;color:var(--grey-200);}
+  .guide-body .md-li{display:flex;gap:0.5rem;margin-bottom:0.4rem;padding-left:1rem;}
+  .guide-body .md-li::before{content:'▸';color:var(--red);flex-shrink:0;font-size:0.7rem;margin-top:0.25rem;}
+  .guide-body .md-ol-li{display:flex;gap:0.75rem;margin-bottom:0.5rem;padding-left:0.5rem;}
+  .guide-body .md-ol-num{color:var(--red);font-family:var(--mono);font-weight:700;min-width:1.5rem;flex-shrink:0;}
+  .guide-body .md-bold{color:var(--white);font-weight:600;}
+  .guide-body .md-code{font-family:var(--mono);background:var(--grey-800);color:#88ddff;padding:0.1rem 0.35rem;font-size:0.8rem;}
+  .guide-body .md-hr{border:none;border-top:1px solid var(--grey-700);margin:1.5rem 0;}
+
+  .back-btn{display:inline-flex;align-items:center;gap:0.5rem;font-family:var(--mono);font-size:0.75rem;color:var(--grey-400);border:1px solid var(--grey-700);padding:0.4rem 0.9rem;transition:all 0.15s;margin-top:1.5rem;text-transform:uppercase;letter-spacing:0.1em;}
+  .back-btn:hover{color:var(--white);border-color:var(--grey-400);}
+
+  footer{background:var(--grey-900);border-top:1px solid var(--grey-700);padding:1rem 2rem;margin-top:3rem;display:flex;justify-content:space-between;font-family:var(--mono);font-size:0.65rem;color:var(--grey-600);}
+  footer span{color:var(--grey-400);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-block">
+    <div class="logo-mark">GS</div>
+    <div>
+      <div class="logo-text">GREEN STACK</div>
+      <div class="logo-sub">Reading, PA // E-Waste Revival Network</div>
+    </div>
+  </div>
+  <nav>
+    <a href="/">// Listings</a>
+    <a href="/#guides">// Guides</a>
+  </nav>
+</header>
+
+<div class="container">
+<main>
+
+  <div class="breadcrumb">
+    <a href="/">HOME</a><span>//</span>
+    <a href="/#guides">REVIVAL GUIDES</a><span>//</span>
+    {{ guide.title }}
+  </div>
+
+  <div class="guide-header">
+    <div class="guide-eyebrow">Revival Guide // {{ guide.category }}</div>
+    <h1 class="guide-title">{{ guide.title }}</h1>
+    <div class="guide-tags">
+      <span class="tag tag-cat">{{ guide.category }}</span>
+      <span class="tag diff-tag {{ guide.difficulty }}">{{ guide.difficulty }}</span>
+      <span class="tag tag-date">Posted: {{ guide.created_at[:10] if guide.created_at else 'N/A' }}</span>
+    </div>
+  </div>
+
+  <div class="guide-body" id="guide-content">
+    <!-- Rendered by JS below -->
+    <pre id="raw-content" style="display:none;">{{ guide.content }}</pre>
+  </div>
+
+  <a href="/#guides" class="back-btn">&#x2190; Back to Guides</a>
+
+</main>
+</div>
+
+<footer>
+  <span>GREEN STACK v0.2 // Reading, PA E-Waste Revival Network</span>
+  <span>Flask + SQLite // Docker // &lt;128MB RAM</span>
+</footer>
+
+<script>
+// Lightweight markdown renderer — no external deps
+(function() {
+  var raw = document.getElementById('raw-content').textContent;
+  var container = document.getElementById('guide-content');
+  var lines = raw.split('\n');
+  var html = '';
+  var olCounter = 0;
+
+  lines.forEach(function(line) {
+    line = line.replace(/`([^`]+)`/g, '<span class="md-code">$1</span>');
+    line = line.replace(/\*\*([^*]+)\*\*/g, '<span class="md-bold">$1</span>');
+
+    if (line.startsWith('## ')) {
+      html += '<div class="md-h2">' + line.slice(3) + '</div>';
+      olCounter = 0;
+    } else if (line.startsWith('### ')) {
+      html += '<div class="md-h3">' + line.slice(4) + '</div>';
+    } else if (/^\d+\.\s/.test(line)) {
+      var m = line.match(/^(\d+)\.\s(.*)/);
+      html += '<div class="md-ol-li"><span class="md-ol-num">' + m[1] + '.</span><span>' + m[2] + '</span></div>';
+    } else if (line.startsWith('- ')) {
+      html += '<div class="md-li"><span>' + line.slice(2) + '</span></div>';
+    } else if (line.startsWith('---')) {
+      html += '<hr class="md-hr">';
+    } else if (line.trim() === '') {
+      html += '<div style="height:0.5rem;"></div>';
+    } else {
+      html += '<div class="md-p">' + line + '</div>';
+    }
+  });
+
+  container.innerHTML = html;
+})();
+</script>
+</body>
+</html>

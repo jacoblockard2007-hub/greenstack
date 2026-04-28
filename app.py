@@ -51,11 +51,11 @@ def init_db():
             db.executemany(
                 'INSERT INTO listings (title, description, condition, zip_code, status) VALUES (?,?,?,?,?)',
                 [
-                    ('Lenovo ThinkPad X220', 'Won\'t POST. Likely bad RAM slot. All other parts intact.', 'Broken', '19601', 'available'),
-                    ('Dell OptiPlex 3020', 'No HDD, boots to PXE. Good for a student server.', 'Incomplete', '19604', 'available'),
-                    ('Raspberry Pi 3B+', 'Overclocked, SD card corrupted. Board is fine.', 'Damaged', '19602', 'available'),
-                    ('HP Compaq 6200 Pro', 'Cracked LCD, mobo and CPU perfect.', 'Broken', '19605', 'available'),
-                    ('Apple MacBook Pro 2012', 'GPU failure. Good for parts donor.', 'Broken', '19601', 'pending'),
+                    ('Lenovo ThinkPad X390', 'Found this at a yard sale on Muhlenberg St. Powers on, gets to the BIOS screen then freezes. No RAM or SSD in it. Screen looks fine, keyboard is clean. Might just need RAM seated properly — I don\'t have the parts to test it.', 'Incomplete', '19601', 'available'),
+                    ('Dell Latitude 5400 (lot of 2)', 'My cousin worked at an office that was shutting down. These two came home with him. Neither has a hard drive. One boots to PXE no problem, the other shows a fan error on startup. Both have 8GB RAM still in them. Free to whoever can use them.', 'Incomplete', '19604', 'available'),
+                    ('HP Pavilion 15 — no power', 'My daughter spilled water on this about a year ago. Let it dry out for weeks but it never came back on. The screen has no cracks and the keyboard feels fine. Charging light doesn\'t even flicker. Could be the power board or worse. Comes with the charger.', 'Damaged', '19602', 'available'),
+                    ('Dell OptiPlex 7050 Mini', 'Pulled from a small business on Penn Ave that closed. Boots fine, runs, but the SSD has a bad sector and Windows keeps failing to load past the login screen. Could probably just swap the drive. Comes with power brick. No monitor.', 'Broken', '19605', 'available'),
+                    ('Acer Chromebook 14 — cracked screen', 'Kid dropped it. Everything works — keyboard, trackpad, wifi, charges fine — but the LCD is cracked bad in the corner and has a dead zone. If someone can source a replacement panel this is basically a free laptop. Comes with charger.', 'Damaged', '19601', 'pending'),
                 ]
             )
             db.executemany(
@@ -225,6 +225,10 @@ def new_guide():
             return redirect(url_for('index'))
 
     return render_template('new_guide.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 if __name__ == '__main__':
     init_db()
